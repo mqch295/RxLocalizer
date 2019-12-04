@@ -33,7 +33,7 @@ public protocol LocalizerType {
     /// - Parameter string: String which will be localized
     /// - Parameter arguments: String argments which will be interpolated inside localized string
     /// - Returns: Localized string
-    func localized(_ string: String, arguments: CVarArg...) -> Driver<String>
+    func localized(_ string: String, arguments: [CVarArg]) -> Driver<String>
     
     /// Localizes the string synchronously
     ///
@@ -46,7 +46,7 @@ public protocol LocalizerType {
     /// - Parameter string: String which will be localized
     /// - Parameter arguments: String argments which will be interpolated inside localized string
     /// - Returns: Localized string
-    func localized(_ string: String, arguments: CVarArg...) -> String
+    func localized(_ string: String, arguments: [CVarArg]) -> String
 
 }
 
@@ -68,7 +68,7 @@ public class Localizer: LocalizerType {
         }
     }
     
-    public func localized(_ string: String, arguments: CVarArg...) -> Driver<String> {
+    public func localized(_ string: String, arguments: [CVarArg]) -> Driver<String> {
         return localizationBundle.asDriver().withLatestFrom(configuration.asDriver()) {
             String(format: $0.localizedString(forKey: string, value: "Unlocalized String", table: $1.tableName), arguments: arguments)
         }
@@ -78,7 +78,7 @@ public class Localizer: LocalizerType {
         return localizationBundle.value.localizedString(forKey: string, value: "Unlocalized String", table: configuration.value.tableName)
     }
     
-    public func localized(_ string: String, arguments: CVarArg...) -> String {
+    public func localized(_ string: String, arguments: [CVarArg]) -> String {
         return String(format: localizationBundle.value.localizedString(forKey: string, value: "Unlocalized String", table: configuration.value.tableName), arguments: arguments)
     }
     
